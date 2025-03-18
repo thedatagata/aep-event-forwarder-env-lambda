@@ -1,0 +1,13 @@
+{
+    "AEPConnectFunction": {
+      "AEP_ENDPOINT": "https://dcs.adobedc.net/collection/dataflowid",
+      "IMS_ENDPOINT": "https://ims-na1.adobelogin.com/ims/token/v2",
+      "CLIENT_ID": "client_id",
+      "CLIENT_SECRET": "client_secret",
+      "IMS_ORG": "imsorg@AdobeOrg",
+      "TECHNICAL_ACCOUNT_ID": "techaccnt@techacct.adobe.com",
+      "SCOPES": "openid,AdobeID,read_organizations,additional_info.projectedProductContext,session",
+      "FLOW_ID": "flow",
+      "SANDBOX_NAME": "dev"
+    }
+  }

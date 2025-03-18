@@ -1,0 +1,22 @@
+version = 0.1
+
+[default.deploy.parameters]
+confirm_changeset = false
+stack_name = "aep-connect-event-forwarder"
+resolve_s3 = true
+capabilities = [ "CAPABILITY_IAM", "CAPABILITY_NAMED_IAM" ]
+
+  [default.deploy.parameters.parameter_overrides]
+  AepEndpoint = "{{resolve:ssm:/aep-connect/AepEndpoint:1}}"
+  ClientId = "{{resolve:ssm:/aep-connect/ClientId:1}}"
+  ClientSecret = "{{resolve:ssm:/aep-connect/ClientSecret:1}}"
+  ImsOrg = "{{resolve:ssm:/aep-connect/ImsOrg:1}}"
+  FlowId = "{{resolve:ssm:/aep-connect/FlowId:1}}"
+  SandboxName = "{{resolve:ssm:/aep-connect/SandboxName:1}}"
+
+[default.global.parameters]
+stack_name = "aep-connect-event-forwarder"
+region = "us-east-1"
+
+[local.local.parameters]
+# Local development uses env vars - load from .env file manually

@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  AepEndpoint:
+    Type: String
+    Default: ""
+    Description: "Adobe Experience Platform endpoint URL"
+  ImsEndpoint:
+    Type: String
+    Default: "https://ims-na1.adobelogin.com/ims/token/v2"
+    Description: "Adobe IMS endpoint URL"
+  ClientId:
+    Type: String
+    Default: ""
+    Description: "Adobe client ID"
+  ClientSecret:
+    Type: String
+    Default: ""
+    Description: "Adobe client secret"
+  ImsOrg:
+    Type: String
+    Default: ""
+    Description: "Adobe IMS organization ID"
+  TechnicalAccountId:
+    Type: String
+    Default: ""
+    Description: "Adobe technical account ID"
+  Scopes:
+    Type: String
+    Default: "openid,AdobeID,read_organizations,additional_info.projectedProductContext,session"
+    Description: "Adobe API scopes"
+  FlowId:
+    Type: String
+    Default: ""
+    Description: "Adobe flow ID"
+  SandboxName:
+    Type: String
+    Default: ""
+    Description: "Adobe sandbox name"
+
+Resources:
+  AEPConnectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Timeout: 30
+      MemorySize: 256
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          AEP_ENDPOINT: !Ref AepEndpoint
+          IMS_ENDPOINT: !Ref ImsEndpoint
+          CLIENT_ID: !Ref ClientId
+          CLIENT_SECRET: !Ref ClientSecret
+          IMS_ORG: !Ref ImsOrg
+          TECHNICAL_ACCOUNT_ID: !Ref TechnicalAccountId
+          SCOPES: !Ref Scopes
+          FLOW_ID: !Ref FlowId
+          SANDBOX_NAME: !Ref SandboxName
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /connect-event
+            Method: post
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+Outputs:
+  AEPConnectFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt AEPConnectFunction.Arn
+  AEPConnectApi:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/connect-event/"
